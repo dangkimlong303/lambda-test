@@ -2,6 +2,7 @@ package com.company.Ex1;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UserService {
     List<User> users = new ArrayList<>();
@@ -57,8 +58,18 @@ public class UserService {
                 mapUser.remove(key);
             }
         });
-        System.out.println(mapUser);
         System.out.println(mapUser.size());
+        System.out.println(mapUser);
+    }
+
+    public void showUserCollectByNameDuplicateVer2() {
+        Map<String, List<User>> mapUser = users.stream().collect(Collectors.groupingBy(User::getName));
+        List<String> names = new ArrayList<>(mapUser.keySet());
+        names.forEach(key -> {
+            if (mapUser.get(key).size() == 1) mapUser.remove(key);
+        });
+        System.out.println(mapUser.size());
+        System.out.println(mapUser);
     }
 
     public void showUserCollectByNameAndAgeDuplicate() {
@@ -83,6 +94,16 @@ public class UserService {
                 .sorted(Map.Entry.comparingByKey())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (oldValue,newValue) -> oldValue, LinkedHashMap::new));
+    }
+
+    public void showUserColletByNameAndAgeDuplicateVer2() {
+        Map<String, List<User>> mapUser = users.stream().collect(Collectors.groupingBy(user -> user.getName() + user.getAge()));
+        List<String> namesAndAges = new ArrayList<>(mapUser.keySet());
+        namesAndAges.forEach(key -> {
+            if (mapUser.get(key).size() == 1) mapUser.remove(key);
+        });
+        System.out.println(mapUser.size());
+        System.out.println(mapUser);
     }
 
     public void showUserCollectByName() {
