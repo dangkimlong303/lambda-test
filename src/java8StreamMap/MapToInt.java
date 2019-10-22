@@ -1,7 +1,9 @@
 package java8StreamMap;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MapToInt {
 	public static void main(String[] args) {
@@ -23,5 +25,18 @@ public class MapToInt {
 		stringBuilder.append(String.format("%s%7s","longdk",""));
 		stringBuilder.append("asdasd");
 		System.out.println(stringBuilder.toString());
+		String name = "long-dk-deptrai";
+		System.out.println(name);
+		name = name.replace("-"," ");
+		System.out.println(name);
+
+		String nameTest = "      Long a    y      s d         k                ";
+		System.out.println(nameTest.trim());
+		System.out.println(String.join("; ", names));
+
+		String[] emails = {"Cheese", "Pepperoni", "Black Olives","Pepperoni","Cheese","Pepperoni"};
+		System.out.println(emails.length);
+		Set<String> listEmail = new HashSet<>(Arrays.asList(emails));
+		listEmail.forEach(e -> System.out.println(e));
 	}
 }

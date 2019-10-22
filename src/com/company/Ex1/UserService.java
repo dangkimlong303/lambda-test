@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 public class UserService {
     List<User> users = new ArrayList<>();
+    List<User> users2 = new ArrayList<>();
 
     enum Gender {
         MALE(0, "Male"),
@@ -33,6 +34,17 @@ public class UserService {
         for (int i = 1; i <= 50; i++) {
             users.add(new User(i,getRandomName(),getRandomGender(), getRandomAgeFrom20To22()));
         }
+
+        users2.add(new User(1,"long","Male",22));
+        users2.add(new User(2,"long","Male",22));
+        users2.add(new User(3,"long","Male",22));
+        users2.add(new User(4,"long","Male",21));
+        users2.add(new User(5,"long","Male",21));
+        users2.add(new User(6,"long","Male",21));
+        users2.add(new User(7,"long","Male",23));
+        users2.add(new User(8,"long","Male",23));
+        users2.add(new User(9,"long","Male",23));
+        users2.add(new User(10,"long","Male",23));
     }
 
     public void showUser() {
@@ -63,7 +75,7 @@ public class UserService {
     }
 
     public void showUserCollectByNameDuplicateVer2() {
-        Map<String, List<User>> mapUser = users.stream().collect(Collectors.groupingBy(User::getName));
+        Map<String, List<User>> mapUser = users2.stream().collect(Collectors.groupingBy(User::getName));
         List<String> names = new ArrayList<>(mapUser.keySet());
         names.forEach(key -> {
             if (mapUser.get(key).size() == 1) mapUser.remove(key);
@@ -97,13 +109,21 @@ public class UserService {
     }
 
     public void showUserColletByNameAndAgeDuplicateVer2() {
-        Map<String, List<User>> mapUser = users.stream().collect(Collectors.groupingBy(user -> user.getName() + user.getAge()));
+        Map<String, List<User>> mapUser = users2.stream().collect(Collectors.groupingBy(user -> user.getName() + user.getAge()));
         List<String> namesAndAges = new ArrayList<>(mapUser.keySet());
         namesAndAges.forEach(key -> {
             if (mapUser.get(key).size() == 1) mapUser.remove(key);
         });
         System.out.println(mapUser.size());
         System.out.println(mapUser);
+    }
+
+    public void showUserColletByNameAndAgeDuplicateVer3 () {
+        Map<String, List<User>> map = users2.stream().collect(Collectors.groupingBy(user -> user.getName() + user.getAge()))
+                .entrySet().stream()
+                .filter(a -> a.getValue().size() > 1).collect(Collectors.toMap(s -> s.getKey(), s -> s.getValue()));
+        System.out.println(map.size());
+        System.out.println(map);
     }
 
     public void showUserCollectByName() {
@@ -114,6 +134,15 @@ public class UserService {
     public void showUserCollectByAge() {
         List<Integer> listAge = users.stream().map(User::getAge).collect(Collectors.toList());
         listAge.forEach(age -> System.out.printf("%-10s %-10d \n","Age:",age));
+    }
+
+    public void showSortByName() {
+        users.sort(Comparator.comparing(User::getName).thenComparing(User::getAge).thenComparing(User::getGender));
+        users.forEach(user -> user.display());
+    }
+    public void showSortByNameVer2() {
+        users.sort(Comparator.comparing(User::getName).reversed().thenComparing(User::getAge).reversed().thenComparing(User::getGender).reversed());
+        users.forEach(user -> user.display());
     }
 
     public void showCountUserMaleAndFemal() {
@@ -134,8 +163,7 @@ public class UserService {
     }
 
     public String getRandomGender() {
-        Random random = new Random();
-        return random.nextBoolean() ? Gender.MALE.getName() : Gender.FEMALE.getName();
+        return new Random().nextBoolean() ? Gender.MALE.getName() : Gender.FEMALE.getName();
     }
 
     public Integer getRandomAgeFrom20To22() {
